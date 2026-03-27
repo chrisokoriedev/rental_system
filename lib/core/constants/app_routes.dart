@@ -2,6 +2,8 @@ class AppRoutes {
   static const String signIn = '/sign-in';
   static const String signUp = '/sign-up';
   static const String home = '/app/home';
+  static const String search = '/app/search';
+  static const String bookings = '/app/bookings';
   static const String rentals = '/rentals';
   static const String rentalDetails = '/rental-details';
   static const String bookingSummary = '/booking-summary';

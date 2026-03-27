@@ -32,6 +32,46 @@ final bookingSummaryProvider = Provider<BookingModel?>((ref) {
   );
 });
 
+class BookingBoardNotifier extends Notifier<List<BookingModel>> {
+  @override
+  List<BookingModel> build() => _temporaryBookingSeed;
+
+  void addDraftBooking() {
+    final pending = ref.read(bookingSummaryProvider);
+    if (pending == null) {
+      return;
+    }
+
+    state = [
+      BookingModel(
+        id: 'draft-${DateTime.now().millisecondsSinceEpoch}',
+        rentalId: pending.rentalId,
+        rentalTitle: pending.rentalTitle,
+        rentalLocation: pending.rentalLocation,
+        nights: pending.nights,
+        subtotal: pending.subtotal,
+        serviceFee: pending.serviceFee,
+        total: pending.total,
+        status: 'Draft',
+      ),
+      ...state,
+    ];
+  }
+
+  void removeBooking(String bookingId) {
+    state = state.where((booking) => booking.id != bookingId).toList();
+  }
+
+  void clear() {
+    state = [];
+  }
+}
+
+final bookingBoardProvider =
+    NotifierProvider<BookingBoardNotifier, List<BookingModel>>(
+      BookingBoardNotifier.new,
+    );
+
 class BookingHistoryNotifier extends Notifier<List<BookingModel>> {
   static const _bookingsKey = 'bookings.history';
 
@@ -145,5 +185,30 @@ const _seedBookings = [
     serviceFee: 20,
     total: 495,
     status: 'Paid',
+  ),
+];
+
+const _temporaryBookingSeed = [
+  BookingModel(
+    id: 'draft-1',
+    rentalId: 'r2',
+    rentalTitle: 'Modern Duplex',
+    rentalLocation: 'Ikeja, Lagos',
+    nights: 2,
+    subtotal: 240,
+    serviceFee: 20,
+    total: 260,
+    status: 'Draft',
+  ),
+  BookingModel(
+    id: 'draft-2',
+    rentalId: 'r3',
+    rentalTitle: 'City Loft',
+    rentalLocation: 'Abuja',
+    nights: 1,
+    subtotal: 95,
+    serviceFee: 20,
+    total: 115,
+    status: 'Pending',
   ),
 ];

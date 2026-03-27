@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/providers/auth_session_provider.dart';
 import '../../features/auth/presentation/screens/sign_in_screen.dart';
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
+import '../../features/bookings/presentation/screens/bookings_screen.dart';
 import '../../features/bookings/presentation/screens/booking_summary_screen.dart';
 import '../../features/payments/presentation/screens/checkout_screen.dart';
 import '../../features/payments/presentation/screens/payment_result_screen.dart';
@@ -11,6 +12,7 @@ import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/rentals/presentation/screens/home_screen.dart';
 import '../../features/rentals/presentation/screens/rental_details_screen.dart';
 import '../../features/rentals/presentation/screens/rental_listing_screen.dart';
+import '../../features/rentals/presentation/screens/search_screen.dart';
 import '../constants/app_routes.dart';
 import 'app_shell.dart';
 
@@ -51,6 +53,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.home,
             builder: (context, state) => const HomeScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.search,
+            builder: (context, state) => const SearchScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.bookings,
+            builder: (context, state) => const BookingsScreen(),
           ),
           GoRoute(
             path: AppRoutes.profile,

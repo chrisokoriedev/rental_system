@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_routes.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_text_field.dart';
 import '../../providers/auth_session_provider.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
@@ -15,133 +16,220 @@ class SignInScreen extends ConsumerStatefulWidget {
 }
 
 class _SignInScreenState extends ConsumerState<SignInScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (!isValid) {
+      return;
+    }
+
+    await ref.read(authSessionProvider.notifier).signIn(
+          email: _emailController.text,
+        );
+    if (mounted) {
+      context.go(AppRoutes.home);
+    }
+  }
+
+  String? _validateEmail(String? value) {
+    final email = value?.trim() ?? '';
+    if (email.isEmpty) {
+      return 'Enter your email.';
+    }
+
+    const pattern = r'^[^\s@]+@[^\s@]+\.[^\s@]+$';
+    if (!RegExp(pattern).hasMatch(email)) {
+      return 'Enter a valid email address.';
+    }
+
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    final password = value?.trim() ?? '';
+    if (password.isEmpty) {
+      return 'Enter your password.';
+    }
+    if (password.length < 6) {
+      return 'Password must be at least 6 characters.';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFDCE6F2), Color(0xFFBAC9DD)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFE9EFF7), Color(0xFFF7F2EA)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              height: 250.h,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFFEF8A64), Color(0xFFE97554)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(48),
-                  bottomRight: Radius.circular(48),
-                ),
-              ),
-            ),
-          ),
-          SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 20.h),
-                child: Container(
-                  width: 360.w,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 18.w,
-                    vertical: 20.h,
-                  ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(22.w),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF9F9F9),
-                    borderRadius: BorderRadius.circular(34.r),
+                    borderRadius: BorderRadius.circular(32.r),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF1E2A5A), Color(0xFFEF8A64)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Welcome back',
+                        style: TextStyle(
+                          fontSize: 31.sp,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                      8.verticalSpace,
+                      Text(
+                        'Sign in to continue browsing stays, saving bookings, and managing your profile.',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          height: 1.5,
+                          color: Colors.white.withValues(alpha: 0.82),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                20.verticalSpace,
+                Container(
+                  padding: EdgeInsets.all(20.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30.r),
                     boxShadow: const [
                       BoxShadow(
-                        color: Color(0x22000000),
-                        blurRadius: 22,
+                        color: Color(0x120E1628),
+                        blurRadius: 24,
                         offset: Offset(0, 12),
                       ),
                     ],
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Login Here',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 36.sp,
-                          fontWeight: FontWeight.w800,
-                          color: const Color(0xFF101422),
-                        ),
-                      ),
-                      54.verticalSpace,
-                      OutlinedButton.icon(
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size(double.infinity, 50.h),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(999.r),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Log in',
+                          style: TextStyle(
+                            fontSize: 26.sp,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF101422),
+                            letterSpacing: -0.5,
                           ),
                         ),
-                        onPressed: () async {
-                          await ref.read(authSessionProvider.notifier).signIn();
-                          if (context.mounted) {
+                        8.verticalSpace,
+                        Text(
+                          'Use your email and password, or continue with Google for a quick demo profile.',
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            height: 1.5,
+                            color: const Color(0xFF5E6472),
+                          ),
+                        ),
+                        20.verticalSpace,
+                        OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: Size(double.infinity, 54.h),
+                            side: const BorderSide(color: Color(0xFFD7DDE7)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.r),
+                            ),
+                          ),
+                          onPressed: () async {
+                            await ref
+                                .read(authSessionProvider.notifier)
+                                .signInWithGoogle();
+                            if (!mounted) {
+                              return;
+                            }
                             context.go(AppRoutes.home);
-                          }
-                        },
-                        icon: CircleAvatar(
-                          radius: 11.r,
-                          backgroundColor: Colors.white,
-                          child: Text(
-                            'G',
+                          },
+                          icon: CircleAvatar(
+                            radius: 12.r,
+                            backgroundColor: const Color(0xFFF4F7FB),
+                            child: Text(
+                              'G',
+                              style: TextStyle(
+                                color: const Color(0xFF4285F4),
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          label: Text(
+                            'Continue with Google',
                             style: TextStyle(
-                              color: const Color(0xFF4285F4),
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w700,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1E2A5A),
                             ),
                           ),
                         ),
-                        label: Text(
-                          'Sign in with Google',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        18.verticalSpace,
+                        Row(
+                          children: [
+                            const Expanded(child: Divider()),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              child: Text(
+                                'or',
+                                style: TextStyle(
+                                  fontSize: 13.sp,
+                                  color: const Color(0xFF7A7B86),
+                                ),
+                              ),
+                            ),
+                            const Expanded(child: Divider()),
+                          ],
                         ),
-                      ),
-                      14.verticalSpace,
-                      Text(
-                        'or',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.grey.shade700,
-                          fontWeight: FontWeight.w600,
+                        18.verticalSpace,
+                        AppTextField(
+                          label: 'Email',
+                          hintText: 'you@example.com',
+                          controller: _emailController,
+                          prefixIcon: Icons.mail_outline,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          validator: _validateEmail,
                         ),
-                      ),
-                      14.verticalSpace,
-                      TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Email',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(999.r),
-                          ),
-                        ),
-                      ),
-                      10.verticalSpace,
-                      TextField(
-                        obscureText: _obscurePassword,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(999.r),
-                          ),
+                        14.verticalSpace,
+                        AppTextField(
+                          label: 'Password',
+                          hintText: 'Minimum 6 characters',
+                          controller: _passwordController,
+                          prefixIcon: Icons.lock_outline,
+                          obscureText: _obscurePassword,
+                          textInputAction: TextInputAction.done,
+                          validator: _validatePassword,
                           suffixIcon: IconButton(
                             onPressed: () => setState(() {
                               _obscurePassword = !_obscurePassword;
@@ -153,53 +241,44 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                             ),
                           ),
                         ),
-                      ),
-                      18.verticalSpace,
-                      AppButton(
-                        label: 'Continue',
-                        onPressed: () async {
-                          await ref.read(authSessionProvider.notifier).signIn();
-                          if (context.mounted) {
-                            context.go(AppRoutes.home);
-                          }
-                        },
-                      ),
-                      16.verticalSpace,
-                      Text(
-                        'Request a New Password',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                          decoration: TextDecoration.underline,
-                          color: const Color(0xFF4A4A4A),
+                        18.verticalSpace,
+                        AppButton(
+                          label: 'Continue',
+                          onPressed: _submit,
                         ),
-                      ),
-                      12.verticalSpace,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('New here?', style: TextStyle(fontSize: 13.sp)),
-                          4.horizontalSpace,
-                          GestureDetector(
-                            onTap: () => context.go(AppRoutes.signUp),
-                            child: Text(
-                              'Create an account',
+                        16.verticalSpace,
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Request a new password',
+                            style: TextStyle(fontSize: 13.sp),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'New here?',
                               style: TextStyle(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w700,
-                                decoration: TextDecoration.underline,
+                                fontSize: 13.sp,
+                                color: const Color(0xFF5E6472),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            4.horizontalSpace,
+                            TextButton(
+                              onPressed: () => context.go(AppRoutes.signUp),
+                              child: const Text('Create an account'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

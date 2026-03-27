@@ -8,79 +8,230 @@ import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../providers/auth_session_provider.dart';
 
-class SignUpScreen extends ConsumerWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  String? _validateName(String? value) {
+    final name = value?.trim() ?? '';
+    if (name.isEmpty) {
+      return 'Enter your full name.';
+    }
+    if (name.length < 3) {
+      return 'Name must be at least 3 characters.';
+    }
+    return null;
+  }
+
+  String? _validateEmail(String? value) {
+    final email = value?.trim() ?? '';
+    if (email.isEmpty) {
+      return 'Enter your email.';
+    }
+
+    const pattern = r'^[^\s@]+@[^\s@]+\.[^\s@]+$';
+    if (!RegExp(pattern).hasMatch(email)) {
+      return 'Enter a valid email address.';
+    }
+
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    final password = value?.trim() ?? '';
+    if (password.isEmpty) {
+      return 'Create a password.';
+    }
+    if (password.length < 6) {
+      return 'Password must be at least 6 characters.';
+    }
+    return null;
+  }
+
+  Future<void> _submit() async {
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (!isValid) {
+      return;
+    }
+
+    await ref.read(authSessionProvider.notifier).signUp(
+          fullName: _fullNameController.text,
+          email: _emailController.text,
+        );
+    if (mounted) {
+      context.go(AppRoutes.home);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              24.verticalSpace,
-              Text(
-                'Create Account',
-                style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.w800),
-              ),
-              8.verticalSpace,
-              Text(
-                'Set up your profile to reserve your next stay.',
-                style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade700),
-              ),
-              24.verticalSpace,
-              Card(
-                child: Padding(
-                  padding: EdgeInsets.all(16.w),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFF5EFE8), Color(0xFFE6EEF8)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(22.w),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1E2A5A),
+                    borderRadius: BorderRadius.circular(32.r),
+                  ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const AppTextField(
-                        label: 'Full name',
-                        prefixIcon: Icons.person_outline,
+                      Text(
+                        'Create your profile',
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          letterSpacing: -0.8,
+                        ),
                       ),
-                      14.verticalSpace,
-                      const AppTextField(
-                        label: 'Email',
-                        prefixIcon: Icons.mail_outline,
-                      ),
-                      14.verticalSpace,
-                      const AppTextField(
-                        label: 'Password',
-                        obscureText: true,
-                        prefixIcon: Icons.lock_outline,
-                      ),
-                      20.verticalSpace,
-                      AppButton(
-                        label: 'Create account',
-                        onPressed: () async {
-                          await ref.read(authSessionProvider.notifier).signIn();
-                          if (context.mounted) {
-                            context.go(AppRoutes.home);
-                          }
-                        },
+                      8.verticalSpace,
+                      Text(
+                        'The details you enter here become the profile details shown inside the app.',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          height: 1.5,
+                          color: Colors.white.withValues(alpha: 0.82),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Already have an account?',
-                    style: TextStyle(fontSize: 13.sp),
+                20.verticalSpace,
+                Container(
+                  padding: EdgeInsets.all(20.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30.r),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x120E1628),
+                        blurRadius: 24,
+                        offset: Offset(0, 12),
+                      ),
+                    ],
                   ),
-                  4.horizontalSpace,
-                  TextButton(
-                    onPressed: () => context.go(AppRoutes.signIn),
-                    child: const Text('Sign in'),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Sign up',
+                          style: TextStyle(
+                            fontSize: 26.sp,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        8.verticalSpace,
+                        Text(
+                          'Create an account to keep your booking and profile details in one place.',
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            height: 1.5,
+                            color: const Color(0xFF5E6472),
+                          ),
+                        ),
+                        20.verticalSpace,
+                        AppTextField(
+                          label: 'Full name',
+                          hintText: 'Chris Okorie',
+                          controller: _fullNameController,
+                          prefixIcon: Icons.person_outline,
+                          textInputAction: TextInputAction.next,
+                          validator: _validateName,
+                        ),
+                        14.verticalSpace,
+                        AppTextField(
+                          label: 'Email',
+                          hintText: 'you@example.com',
+                          controller: _emailController,
+                          prefixIcon: Icons.mail_outline,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          validator: _validateEmail,
+                        ),
+                        14.verticalSpace,
+                        AppTextField(
+                          label: 'Password',
+                          hintText: 'Minimum 6 characters',
+                          controller: _passwordController,
+                          obscureText: _obscurePassword,
+                          prefixIcon: Icons.lock_outline,
+                          textInputAction: TextInputAction.done,
+                          validator: _validatePassword,
+                          suffixIcon: IconButton(
+                            onPressed: () => setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            }),
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                            ),
+                          ),
+                        ),
+                        22.verticalSpace,
+                        AppButton(
+                          label: 'Create account',
+                          onPressed: _submit,
+                        ),
+                        16.verticalSpace,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Already have an account?',
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                                color: const Color(0xFF5E6472),
+                              ),
+                            ),
+                            4.horizontalSpace,
+                            TextButton(
+                              onPressed: () => context.go(AppRoutes.signIn),
+                              child: const Text('Sign in'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
