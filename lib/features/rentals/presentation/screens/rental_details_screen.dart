@@ -95,8 +95,11 @@ class RentalDetailsScreen extends ConsumerWidget {
           ),
           20.verticalSpace,
           AppButton(
-            label: 'Book now - \$${rental.pricePerNight.toStringAsFixed(0)}/night',
-            onPressed: () => context.push(AppRoutes.bookingSummary),
+            label: 'Book now - N${rental.pricePerNight.toStringAsFixed(0)}/night',
+            onPressed: () {
+              ref.read(activeBookingIdProvider.notifier).state = null;
+              context.push(AppRoutes.bookingSummary);
+            },
           ),
         ],
       ),

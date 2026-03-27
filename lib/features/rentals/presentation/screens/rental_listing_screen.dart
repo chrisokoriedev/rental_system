@@ -35,7 +35,7 @@ class RentalListingScreen extends ConsumerWidget {
                 imageUrl: rental.imageUrl,
                 title: rental.title,
                 location: rental.location,
-                price: '\$${rental.pricePerNight.toStringAsFixed(0)}/night',
+                price: 'N${rental.pricePerNight.toStringAsFixed(0)}/night',
                 rating: rental.rating.toStringAsFixed(1),
                 onTap: () {
                   ref.read(selectedRentalIdProvider.notifier).state = rental.id;

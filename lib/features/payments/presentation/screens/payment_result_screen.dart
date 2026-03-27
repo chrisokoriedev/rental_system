@@ -100,10 +100,10 @@ class PaymentResultScreen extends ConsumerWidget {
               ),
               24.verticalSpace,
               AppButton(
-                label: 'Go to profile',
+                label: 'Go to Booking',
                 onPressed: () {
                   ref.read(paymentProvider.notifier).clearMessages();
-                  context.go(AppRoutes.profile);
+                  context.go(AppRoutes.bookings);
                 },
               ),
             ],

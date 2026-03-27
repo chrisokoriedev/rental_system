@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../bookings/providers/bookings_ui_provider.dart';
 import '../../providers/rentals_ui_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -135,6 +136,7 @@ class HomeScreen extends ConsumerWidget {
                   onTap: () {
                     ref.read(selectedRentalIdProvider.notifier).state =
                         rental.id;
+                    ref.read(activeBookingIdProvider.notifier).state = null;
                     context.push(AppRoutes.rentalDetails);
                   },
                 );
@@ -172,6 +174,7 @@ class HomeScreen extends ConsumerWidget {
                 rental: rental,
                 onTap: () {
                   ref.read(selectedRentalIdProvider.notifier).state = rental.id;
+                  ref.read(activeBookingIdProvider.notifier).state = null;
                   context.push(AppRoutes.rentalDetails);
                 },
               ),
@@ -250,7 +253,7 @@ class _RentalPreviewCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(999.r),
                 ),
                 child: Text(
-                  '\$${pricePerNight.toStringAsFixed(0)}/night',
+                  'N${pricePerNight.toStringAsFixed(0)}/night',
                   style: TextStyle(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w700,
@@ -363,7 +366,7 @@ class _RentalListCard extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          '\$${rental.pricePerNight.toStringAsFixed(0)}/night',
+                          'N${rental.pricePerNight.toStringAsFixed(0)}/night',
                           style: TextStyle(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w700,

@@ -146,8 +146,12 @@ class _BookingDraftCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accentColor = booking.status == 'Draft'
-        ? AppColors.draftAccent
-        : AppColors.pendingAccent;
+      ? AppColors.draftAccent
+      : booking.status == 'Pending'
+        ? AppColors.pendingAccent
+        : AppColors.successGreen;
+    final canMakePayment =
+      booking.status == 'Draft' || booking.status == 'Pending';
 
     return Container(
       padding: EdgeInsets.all(16.w),
@@ -199,7 +203,7 @@ class _BookingDraftCard extends ConsumerWidget {
             children: [
               _MetaChip(label: '${booking.nights} nights'),
               8.horizontalSpace,
-              _MetaChip(label: '\$${booking.total.toStringAsFixed(0)} total'),
+              _MetaChip(label: 'N${booking.total.toStringAsFixed(0)} total'),
             ],
           ),
           14.verticalSpace,
@@ -216,8 +220,16 @@ class _BookingDraftCard extends ConsumerWidget {
               10.horizontalSpace,
               Expanded(
                 child: FilledButton(
-                  onPressed: () => context.push(AppRoutes.bookingSummary),
-                  child: const Text('Open summary'),
+                  onPressed: canMakePayment
+                      ? () async {
+                          await ref
+                              .read(bookingBoardProvider.notifier)
+                              .moveToPendingAndSelect(booking.id);
+                          if (!context.mounted) return;
+                          context.push(AppRoutes.bookingSummary);
+                        }
+                      : null,
+                  child: Text(canMakePayment ? 'Make payment' : 'Paid'),
                 ),
               ),
             ],
@@ -249,7 +261,8 @@ class _MetaChip extends StatelessWidget {
   }
 }
 
-class _EmptyBookingState extends StatelessWidget {  const _EmptyBookingState({required this.onBrowse});
+class _EmptyBookingState extends StatelessWidget {
+  const _EmptyBookingState({required this.onBrowse});
 
   final VoidCallback onBrowse;
 

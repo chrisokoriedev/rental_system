@@ -106,7 +106,7 @@ class CheckoutScreen extends ConsumerWidget {
                             ),
                           ),
                           Text(
-                            '₦${booking.total.toStringAsFixed(0)}',
+                            'N${booking.total.toStringAsFixed(0)}',
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w700,
@@ -222,10 +222,12 @@ class CheckoutScreen extends ConsumerWidget {
                         if (!context.mounted) return;
 
                         if (success) {
-                          // Save booking
-                          await ref
-                              .read(bookingHistoryProvider.notifier)
-                              .addCurrentBooking();
+                          final activeBookingId = ref.read(activeBookingIdProvider);
+                          if (activeBookingId != null) {
+                            await ref
+                                .read(bookingBoardProvider.notifier)
+                                .markAsPaid(activeBookingId);
+                          }
 
                           if (!context.mounted) return;
 

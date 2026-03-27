@@ -7,8 +7,19 @@ import '../../rentals/providers/rentals_ui_provider.dart';
 import '../models/booking_model.dart';
 
 final selectedNightsProvider = StateProvider<int>((ref) => 1);
+final activeBookingIdProvider = StateProvider<String?>((ref) => null);
 
 final bookingSummaryProvider = Provider<BookingModel?>((ref) {
+  final activeBookingId = ref.watch(activeBookingIdProvider);
+  if (activeBookingId != null) {
+    final board = ref.watch(bookingBoardProvider);
+    for (final booking in board) {
+      if (booking.id == activeBookingId) {
+        return booking;
+      }
+    }
+  }
+
   final rental = ref.watch(selectedRentalProvider);
   final nights = ref.watch(selectedNightsProvider);
 
@@ -33,55 +44,15 @@ final bookingSummaryProvider = Provider<BookingModel?>((ref) {
 });
 
 class BookingBoardNotifier extends Notifier<List<BookingModel>> {
-  @override
-  List<BookingModel> build() => _temporaryBookingSeed;
-
-  void addDraftBooking() {
-    final pending = ref.read(bookingSummaryProvider);
-    if (pending == null) {
-      return;
-    }
-
-    state = [
-      BookingModel(
-        id: 'draft-${DateTime.now().millisecondsSinceEpoch}',
-        rentalId: pending.rentalId,
-        rentalTitle: pending.rentalTitle,
-        rentalLocation: pending.rentalLocation,
-        nights: pending.nights,
-        subtotal: pending.subtotal,
-        serviceFee: pending.serviceFee,
-        total: pending.total,
-        status: 'Draft',
-      ),
-      ...state,
-    ];
-  }
-
-  void removeBooking(String bookingId) {
-    state = state.where((booking) => booking.id != bookingId).toList();
-  }
-
-  void clear() {
-    state = [];
-  }
-}
-
-final bookingBoardProvider =
-    NotifierProvider<BookingBoardNotifier, List<BookingModel>>(
-      BookingBoardNotifier.new,
-    );
-
-class BookingHistoryNotifier extends Notifier<List<BookingModel>> {
-  static const _bookingsKey = 'bookings.history';
+  static const _boardKey = 'bookings.board';
 
   @override
   List<BookingModel> build() {
     final prefs = ref.watch(sharedPreferencesProvider);
-    final rawItems = prefs.getStringList(_bookingsKey);
+    final rawItems = prefs.getStringList(_boardKey);
 
     if (rawItems == null || rawItems.isEmpty) {
-      return _seedBookings;
+      return [];
     }
 
     try {
@@ -92,18 +63,18 @@ class BookingHistoryNotifier extends Notifier<List<BookingModel>> {
           )
           .toList();
     } catch (_) {
-      return _seedBookings;
+      return [];
     }
   }
 
-  Future<void> addCurrentBooking() async {
+  Future<void> addDraftBooking() async {
     final pending = ref.read(bookingSummaryProvider);
     if (pending == null) {
       return;
     }
 
-    final confirmed = BookingModel(
-      id: 'b${DateTime.now().millisecondsSinceEpoch}',
+    final created = BookingModel(
+      id: 'draft-${DateTime.now().millisecondsSinceEpoch}',
       rentalId: pending.rentalId,
       rentalTitle: pending.rentalTitle,
       rentalLocation: pending.rentalLocation,
@@ -111,104 +82,78 @@ class BookingHistoryNotifier extends Notifier<List<BookingModel>> {
       subtotal: pending.subtotal,
       serviceFee: pending.serviceFee,
       total: pending.total,
-      status: 'Paid',
+      status: 'Draft',
     );
 
-    state = [confirmed, ...state];
+    state = [created, ...state];
+    ref.read(activeBookingIdProvider.notifier).state = created.id;
     await _saveState();
+  }
+
+  Future<void> moveToPendingAndSelect(String bookingId) async {
+    ref.read(activeBookingIdProvider.notifier).state = bookingId;
+    state =
+        state
+            .map(
+              (booking) => booking.id != bookingId || booking.status == 'Paid'
+                  ? booking
+                  : _copyWithStatus(booking, 'Pending'),
+            )
+            .toList();
+    await _saveState();
+  }
+
+  Future<void> markAsPaid(String bookingId) async {
+    state =
+        state
+            .map(
+              (booking) =>
+                  booking.id == bookingId ? _copyWithStatus(booking, 'Paid') : booking,
+            )
+            .toList();
+    await _saveState();
+  }
+
+  Future<void> removeBooking(String bookingId) async {
+    state = state.where((booking) => booking.id != bookingId).toList();
+    if (ref.read(activeBookingIdProvider) == bookingId) {
+      ref.read(activeBookingIdProvider.notifier).state = null;
+    }
+    await _saveState();
+  }
+
+  bool draftAlreadyExists() {
+    return state.any((b) => b.status == 'Draft');
+  }
+
+  Future<void> clear() async {
+    state = [];
+    ref.read(activeBookingIdProvider.notifier).state = null;
+    await _saveState();
+  }
+
+  BookingModel _copyWithStatus(BookingModel booking, String status) {
+    return BookingModel(
+      id: booking.id,
+      rentalId: booking.rentalId,
+      rentalTitle: booking.rentalTitle,
+      rentalLocation: booking.rentalLocation,
+      nights: booking.nights,
+      subtotal: booking.subtotal,
+      serviceFee: booking.serviceFee,
+      total: booking.total,
+      status: status,
+    );
   }
 
   Future<void> _saveState() async {
     final prefs = ref.read(sharedPreferencesProvider);
     final items = state.map((booking) => jsonEncode(booking.toJson())).toList();
-    await prefs.setStringList(_bookingsKey, items);
+    await prefs.setStringList(_boardKey, items);
   }
 }
 
-final bookingHistoryProvider =
-    NotifierProvider<BookingHistoryNotifier, List<BookingModel>>(
-      BookingHistoryNotifier.new,
+final bookingBoardProvider =
+    NotifierProvider<BookingBoardNotifier, List<BookingModel>>(
+      BookingBoardNotifier.new,
     );
-
-const _seedBookings = [
-  BookingModel(
-    id: 'b1',
-    rentalId: 'r1',
-    rentalTitle: 'Ocean View Apartment',
-    rentalLocation: 'Lekki, Lagos',
-    nights: 3,
-    subtotal: 240,
-    serviceFee: 20,
-    total: 260,
-    status: 'Paid',
-  ),
-  BookingModel(
-    id: 'b2',
-    rentalId: 'r3',
-    rentalTitle: 'City Loft',
-    rentalLocation: 'Abuja',
-    nights: 2,
-    subtotal: 190,
-    serviceFee: 20,
-    total: 210,
-    status: 'Paid',
-  ),
-  BookingModel(
-    id: 'b3',
-    rentalId: 'r2',
-    rentalTitle: 'Modern Duplex',
-    rentalLocation: 'Ikeja, Lagos',
-    nights: 4,
-    subtotal: 480,
-    serviceFee: 20,
-    total: 500,
-    status: 'Paid',
-  ),
-  BookingModel(
-    id: 'b4',
-    rentalId: 'r1',
-    rentalTitle: 'Ocean View Apartment',
-    rentalLocation: 'Lekki, Lagos',
-    nights: 1,
-    subtotal: 80,
-    serviceFee: 20,
-    total: 100,
-    status: 'Pending',
-  ),
-  BookingModel(
-    id: 'b5',
-    rentalId: 'r3',
-    rentalTitle: 'City Loft',
-    rentalLocation: 'Abuja',
-    nights: 5,
-    subtotal: 475,
-    serviceFee: 20,
-    total: 495,
-    status: 'Paid',
-  ),
-];
-
-const _temporaryBookingSeed = [
-  BookingModel(
-    id: 'draft-1',
-    rentalId: 'r2',
-    rentalTitle: 'Modern Duplex',
-    rentalLocation: 'Ikeja, Lagos',
-    nights: 2,
-    subtotal: 240,
-    serviceFee: 20,
-    total: 260,
-    status: 'Draft',
-  ),
-  BookingModel(
-    id: 'draft-2',
-    rentalId: 'r3',
-    rentalTitle: 'City Loft',
-    rentalLocation: 'Abuja',
-    nights: 1,
-    subtotal: 95,
-    serviceFee: 20,
-    total: 115,
-    status: 'Pending',
-  ),
-];

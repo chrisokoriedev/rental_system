@@ -64,15 +64,15 @@ class BookingSummaryScreen extends ConsumerWidget {
                     14.verticalSpace,
                     _amountRow('Nights', '${booking.nights}'),
                     8.verticalSpace,
-                    _amountRow('Subtotal', '\$${booking.subtotal.toStringAsFixed(0)}'),
+                    _amountRow('Subtotal', 'N${booking.subtotal.toStringAsFixed(0)}'),
                     8.verticalSpace,
-                    _amountRow('Service fee', '\$${booking.serviceFee.toStringAsFixed(0)}'),
+                    _amountRow('Service fee', 'N${booking.serviceFee.toStringAsFixed(0)}'),
                     10.verticalSpace,
                     const Divider(),
                     10.verticalSpace,
                     _amountRow(
                       'Total',
-                      '\$${booking.total.toStringAsFixed(0)}',
+                      'N${booking.total.toStringAsFixed(0)}',
                       isBold: true,
                     ),
                   ],
@@ -82,7 +82,16 @@ class BookingSummaryScreen extends ConsumerWidget {
             const Spacer(),
             AppButton(
               label: 'Proceed to checkout',
-              onPressed: () => context.push(AppRoutes.checkout),
+              onPressed: () async {
+                // Add current booking to temporary board as Draft if not already there
+                if (ref.read(activeBookingIdProvider) == null) {
+                  await ref
+                      .read(bookingBoardProvider.notifier)
+                      .addDraftBooking();
+                }
+                if (!context.mounted) return;
+                context.push(AppRoutes.checkout);
+              },
             ),
           ],
         ),
