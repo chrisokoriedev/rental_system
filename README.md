@@ -2,6 +2,12 @@
 
 Mobile rental booking mock-up built with Flutter, Riverpod, and GoRouter.
 
+## Download APK
+
+[⬇ Download Android APK](https://drive.google.com/file/d/1Wz4T4qktbMbikiKnmHwyonC-J9IZeGZW/view?usp=sharing)
+
+> Android 5.0+ required. Enable "Install from unknown sources" in device settings before installing.
+
 ## What this is
 
 - A portfolio/assessment style mock project.
