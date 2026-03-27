@@ -38,12 +38,12 @@ class PaystackPaymentResponse {
 
 /// Service to handle Paystack payment integration
 class PaystackPaymentService {
-  late String _paystackPublicKey;
+  late String _secretKey;
   final String _callbackUrl = 'https://example.com/callback';
 
-  /// Initialize Paystack with a public key only.
-  Future<void> initialize(String publicKey) async {
-    _paystackPublicKey = publicKey;
+  /// Initialize Paystack with key.
+  Future<void> initialize(String secretKey) async {
+    _secretKey = secretKey;
   }
 
   /// Charge card and process payment with Paystack
@@ -59,9 +59,7 @@ class PaystackPaymentService {
         customerEmail: transaction.email,
         amount: transaction.amountInKobo.toString(),
         reference: transaction.reference,
-        // The plugin API uses the parameter name `secretKey`.
-        // For client apps, pass only your Paystack public key here.
-        secretKey: _paystackPublicKey,
+        secretKey: _secretKey,
         callBackUrl: _callbackUrl,
         currency: transaction.currency ?? 'NGN',
         onSuccess: () {

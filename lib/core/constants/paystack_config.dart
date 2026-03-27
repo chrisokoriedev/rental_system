@@ -1,10 +1,12 @@
 /// Paystack configuration constants
-/// This mock app must only use a Paystack PUBLIC key on device.
+/// Replace with your actual Paystack public key from https://dashboard.paystack.co/
 class PaystackConfig {
-  static const String publicKey = String.fromEnvironment(
-    'PAYSTACK_PUBLIC_KEY',
-    defaultValue: 'pk_test_replace_me',
-  );
+  static const String publicKey = 'pk_test_79cea0725615fdee14403e304abac2525c376630';
+
+  /// Test secret key for mock/demo flow.
+  static const String secretKey = 'sk_test_a2dccaaa0b33c31f62ef29f8eb6f745a16089366';
+
+  static const String apiEndpoint = 'https://api.paystack.co';
 
   /// Callback URL — set this in your Paystack dashboard under Settings > API Keys & Webhooks
   static const String callbackUrl = 'https://example.com/callback';
