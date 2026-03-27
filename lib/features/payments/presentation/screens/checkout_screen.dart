@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../bookings/providers/bookings_ui_provider.dart';
 import '../../providers/payment_ui_provider.dart';
@@ -33,7 +34,7 @@ class CheckoutScreen extends ConsumerWidget {
             if (booking != null)
               Text(
                 'Total: \$${booking.total.toStringAsFixed(0)}',
-                style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade700),
+                style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondary),
               ),
             12.verticalSpace,
             ...PaymentMethod.values.map(
@@ -43,7 +44,7 @@ class CheckoutScreen extends ConsumerWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.r),
                 ),
-                tileColor: Colors.white,
+                tileColor: AppColors.white,
                 title: Text(
                   item.name.toUpperCase(),
                   style: TextStyle(fontSize: 14.sp),

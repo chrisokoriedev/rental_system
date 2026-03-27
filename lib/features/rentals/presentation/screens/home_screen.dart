@@ -23,7 +23,7 @@ class HomeScreen extends ConsumerWidget {
             'Good Morning',
             style: TextStyle(
               fontSize: 13.sp,
-              color: const Color(0xFF7A7B86),
+              color: AppColors.textMuted,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -45,22 +45,22 @@ class HomeScreen extends ConsumerWidget {
               height: 56.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.r),
-                color: Colors.white,
-                border: Border.all(color: const Color(0xFFDDE2EA)),
+                color: AppColors.white,
+                border: Border.all(color: AppColors.borderLight),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.search,
                     size: 22.w,
-                    color: const Color(0xFF7A7B86),
+                    color: AppColors.textMuted,
                   ),
                   10.horizontalSpace,
                   Text(
                     'Search lodges, city, landmark',
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: const Color(0xFF7A7B86),
+                      color: AppColors.textMuted,
                     ),
                   ),
                 ],
@@ -83,7 +83,7 @@ class HomeScreen extends ConsumerWidget {
                     width: 34.w,
                     height: 34.w,
                     decoration: const BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.person, size: 20),
@@ -97,7 +97,7 @@ class HomeScreen extends ConsumerWidget {
                           'Recent Searches',
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: Colors.white70,
+                            color: AppColors.white70,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -106,7 +106,7 @@ class HomeScreen extends ConsumerWidget {
                           featuredRentals.first.title,
                           style: TextStyle(
                             fontSize: 15.sp,
-                            color: Colors.white,
+                            color: AppColors.white,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -115,7 +115,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                   Icon(
                     Icons.arrow_forward_ios_rounded,
-                    color: Colors.white70,
+                    color: AppColors.white70,
                     size: 14.w,
                   ),
                 ],
@@ -159,7 +159,7 @@ class HomeScreen extends ConsumerWidget {
                   (city) => Chip(
                     label: Text(city),
                     side: BorderSide.none,
-                    backgroundColor: Color(0xFFE7ECF5),
+                    backgroundColor: AppColors.chipBackground,
                   ),
                 )
                 .toList(),
@@ -204,7 +204,7 @@ class _RentalPreviewCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24.r),
             gradient: const LinearGradient(
-              colors: [Colors.transparent, Color(0xD9101420)],
+              colors: [AppColors.transparent, AppColors.imageOverlay],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -218,7 +218,7 @@ class _RentalPreviewCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontWeight: FontWeight.w700,
                   fontSize: 16.sp,
                 ),
@@ -226,13 +226,13 @@ class _RentalPreviewCard extends StatelessWidget {
               4.verticalSpace,
               Text(
                 location,
-                style: TextStyle(color: Colors.white70, fontSize: 12.sp),
+                style: TextStyle(color: AppColors.white70, fontSize: 12.sp),
               ),
               8.verticalSpace,
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(999.r),
                 ),
                 child: Text(

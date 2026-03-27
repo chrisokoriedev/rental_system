@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/rental_card.dart';
 import '../../providers/rentals_ui_provider.dart';
@@ -25,7 +26,7 @@ class SearchScreen extends ConsumerWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(28.r),
               gradient: const LinearGradient(
-                colors: [Color(0xFFF8F4EC), Color(0xFFE6EEF8)],
+                colors: [AppColors.backgroundWarm, AppColors.backgroundBlueSoft],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -46,7 +47,7 @@ class SearchScreen extends ConsumerWidget {
                   'Search by title or city and jump straight into a listing.',
                   style: TextStyle(
                     fontSize: 14.sp,
-                    color: const Color(0xFF5E6472),
+                    color: AppColors.textSecondary,
                     height: 1.5,
                   ),
                 ),
@@ -87,7 +88,7 @@ class SearchScreen extends ConsumerWidget {
             Container(
               padding: EdgeInsets.all(20.w),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(24.r),
               ),
               child: Column(

@@ -29,13 +29,13 @@ class ProfileScreen extends ConsumerWidget {
               children: [
                 CircleAvatar(
                   radius: 32.r,
-                  backgroundColor: Colors.white.withValues(alpha: 0.16),
+                  backgroundColor: AppColors.white16,
                   child: Text(
                     _profileInitials(profile),
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
@@ -49,7 +49,7 @@ class ProfileScreen extends ConsumerWidget {
                         style: TextStyle(
                           fontSize: 22.sp,
                           fontWeight: FontWeight.w800,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                       6.verticalSpace,
@@ -57,7 +57,7 @@ class ProfileScreen extends ConsumerWidget {
                         profile?.email ?? 'guest@rental.app',
                         style: TextStyle(
                           fontSize: 13.sp,
-                          color: Colors.white70,
+                          color: AppColors.white70,
                         ),
                       ),
                     ],
@@ -70,7 +70,7 @@ class ProfileScreen extends ConsumerWidget {
           Container(
             padding: EdgeInsets.all(18.w),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(24.r),
             ),
             child: Column(
@@ -167,7 +167,7 @@ class _ProfileDetailRow extends StatelessWidget {
           flex: 2,
           child: Text(
             label,
-            style: const TextStyle(color: Color(0xFF7A7B86)),
+            style: const TextStyle(color: AppColors.textMuted),
           ),
         ),
         Expanded(

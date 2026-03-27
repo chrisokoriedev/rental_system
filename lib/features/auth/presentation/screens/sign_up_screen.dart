@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../providers/auth_session_provider.dart';
@@ -87,7 +88,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFF5EFE8), Color(0xFFE6EEF8)],
+            colors: [AppColors.backgroundSandSoft, AppColors.backgroundBlueSoft],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -101,7 +102,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 Container(
                   padding: EdgeInsets.all(22.w),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1E2A5A),
+                    color: AppColors.brandNavy,
                     borderRadius: BorderRadius.circular(32.r),
                   ),
                   child: Column(
@@ -112,7 +113,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         style: TextStyle(
                           fontSize: 30.sp,
                           fontWeight: FontWeight.w800,
-                          color: Colors.white,
+                          color: AppColors.white,
                           letterSpacing: -0.8,
                         ),
                       ),
@@ -122,7 +123,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         style: TextStyle(
                           fontSize: 14.sp,
                           height: 1.5,
-                          color: Colors.white.withValues(alpha: 0.82),
+                          color: AppColors.white82,
                         ),
                       ),
                     ],
@@ -132,11 +133,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 Container(
                   padding: EdgeInsets.all(20.w),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(30.r),
                     boxShadow: const [
                       BoxShadow(
-                        color: Color(0x120E1628),
+                        color: AppColors.shadowOverlay,
                         blurRadius: 24,
                         offset: Offset(0, 12),
                       ),
@@ -161,7 +162,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           style: TextStyle(
                             fontSize: 13.sp,
                             height: 1.5,
-                            color: const Color(0xFF5E6472),
+                            color: AppColors.textSecondary,
                           ),
                         ),
                         20.verticalSpace,
@@ -216,7 +217,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               'Already have an account?',
                               style: TextStyle(
                                 fontSize: 13.sp,
-                                color: const Color(0xFF5E6472),
+                                color: AppColors.textSecondary,
                               ),
                             ),
                             4.horizontalSpace,

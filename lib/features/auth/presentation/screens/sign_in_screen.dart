@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../providers/auth_session_provider.dart';
@@ -73,7 +74,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFE9EFF7), Color(0xFFF7F2EA)],
+            colors: [AppColors.backgroundBlue, AppColors.backgroundSand],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -89,7 +90,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(32.r),
                     gradient: const LinearGradient(
-                      colors: [Color(0xFF1E2A5A), Color(0xFFEF8A64)],
+                      colors: [AppColors.brandNavy, AppColors.sunset],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
@@ -102,7 +103,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         style: TextStyle(
                           fontSize: 31.sp,
                           fontWeight: FontWeight.w800,
-                          color: Colors.white,
+                          color: AppColors.white,
                           letterSpacing: -0.8,
                         ),
                       ),
@@ -112,7 +113,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         style: TextStyle(
                           fontSize: 14.sp,
                           height: 1.5,
-                          color: Colors.white.withValues(alpha: 0.82),
+                          color: AppColors.white82,
                         ),
                       ),
                     ],
@@ -122,11 +123,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 Container(
                   padding: EdgeInsets.all(20.w),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(30.r),
                     boxShadow: const [
                       BoxShadow(
-                        color: Color(0x120E1628),
+                        color: AppColors.shadowOverlay,
                         blurRadius: 24,
                         offset: Offset(0, 12),
                       ),
@@ -142,7 +143,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           style: TextStyle(
                             fontSize: 26.sp,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF101422),
+                            color: AppColors.textPrimary,
                             letterSpacing: -0.5,
                           ),
                         ),
@@ -152,14 +153,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           style: TextStyle(
                             fontSize: 13.sp,
                             height: 1.5,
-                            color: const Color(0xFF5E6472),
+                            color: AppColors.textSecondary,
                           ),
                         ),
                         20.verticalSpace,
                         OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
                             minimumSize: Size(double.infinity, 54.h),
-                            side: const BorderSide(color: Color(0xFFD7DDE7)),
+                            side: const BorderSide(color: AppColors.borderSoft),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.r),
                             ),
@@ -175,11 +176,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           },
                           icon: CircleAvatar(
                             radius: 12.r,
-                            backgroundColor: const Color(0xFFF4F7FB),
+                            backgroundColor: AppColors.elevatedSurface,
                             child: Text(
                               'G',
                               style: TextStyle(
-                                color: const Color(0xFF4285F4),
+                                color: AppColors.googleBlue,
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -190,7 +191,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                             style: TextStyle(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF1E2A5A),
+                              color: AppColors.brandNavy,
                             ),
                           ),
                         ),
@@ -204,7 +205,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                                 'or',
                                 style: TextStyle(
                                   fontSize: 13.sp,
-                                  color: const Color(0xFF7A7B86),
+                                  color: AppColors.textMuted,
                                 ),
                               ),
                             ),
@@ -261,7 +262,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                               'New here?',
                               style: TextStyle(
                                 fontSize: 13.sp,
-                                color: const Color(0xFF5E6472),
+                                color: AppColors.textSecondary,
                               ),
                             ),
                             4.horizontalSpace,

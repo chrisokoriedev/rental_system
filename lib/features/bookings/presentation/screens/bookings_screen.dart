@@ -37,7 +37,7 @@ class BookingsScreen extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 28.sp,
                     fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                    color: AppColors.white,
                     letterSpacing: -0.8,
                   ),
                 ),
@@ -46,7 +46,7 @@ class BookingsScreen extends ConsumerWidget {
                   'A temporary list powered by a Riverpod notifier. Add the current rental draft or remove items as you test the flow.',
                   style: TextStyle(
                     fontSize: 14.sp,
-                    color: Colors.white70,
+                    color: AppColors.white70,
                     height: 1.5,
                   ),
                 ),
@@ -54,7 +54,7 @@ class BookingsScreen extends ConsumerWidget {
                 Container(
                   padding: EdgeInsets.all(14.w),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.08),
+                    color: AppColors.white08,
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Row(
@@ -68,7 +68,7 @@ class BookingsScreen extends ConsumerWidget {
                               style: TextStyle(
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                             4.verticalSpace,
@@ -78,7 +78,7 @@ class BookingsScreen extends ConsumerWidget {
                                   : '$selectedNights night draft ready to add',
                               style: TextStyle(
                                 fontSize: 12.sp,
-                                color: Colors.white70,
+                                color: AppColors.white70,
                               ),
                             ),
                           ],
@@ -146,13 +146,13 @@ class _BookingDraftCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accentColor = booking.status == 'Draft'
-        ? const Color(0xFFE6A44D)
-        : const Color(0xFF4D8BFF);
+        ? AppColors.draftAccent
+        : AppColors.pendingAccent;
 
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(24.r),
       ),
       child: Column(
@@ -191,7 +191,7 @@ class _BookingDraftCard extends ConsumerWidget {
             booking.rentalLocation,
             style: TextStyle(
               fontSize: 13.sp,
-              color: const Color(0xFF5E6472),
+              color: AppColors.textSecondary,
             ),
           ),
           14.verticalSpace,
@@ -238,7 +238,7 @@ class _MetaChip extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFF4F6FA),
+        color: AppColors.subtleSurface,
         borderRadius: BorderRadius.circular(999.r),
       ),
       child: Text(
@@ -259,7 +259,7 @@ class _EmptyBookingState extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(24.r),
       ),
       child: Column(
@@ -274,7 +274,7 @@ class _EmptyBookingState extends StatelessWidget {
           Text(
             'Open Search, choose a rental, then add a draft here.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13.sp, color: const Color(0xFF5E6472)),
+            style: TextStyle(fontSize: 13.sp, color: AppColors.textSecondary),
           ),
           16.verticalSpace,
           FilledButton.tonal(
