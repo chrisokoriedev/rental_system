@@ -20,11 +20,9 @@ Mobile rental booking mock-up built with Flutter, Riverpod, and GoRouter.
 
 1. Install Flutter SDK.
 2. Run `flutter pub get`.
-3. Start the app:
-`flutter run --dart-define=PAYSTACK_PUBLIC_KEY=pk_test_your_public_key`
 
 ## Project structure
 
 - `lib/core`: shared constants, router, theme, common widgets.
 - `lib/features`: feature-first modules (`auth`, `rentals`, `bookings`, `payments`, `profile`).
-- `android/`, `ios/`, `web/`, `windows/`, `linux/`, `macos/`: Flutter platform targets.
+- `android/`, `ios/`: Flutter platform targets.
