@@ -50,11 +50,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.search,
-                    size: 22.w,
-                    color: AppColors.textMuted,
-                  ),
+                  Icon(Icons.search, size: 22.w, color: AppColors.textMuted),
                   10.horizontalSpace,
                   Text(
                     'Search lodges, city, landmark',
@@ -145,25 +141,43 @@ class HomeScreen extends ConsumerWidget {
               },
             ),
           ),
-          20.verticalSpace,
-          Text(
-            'Top Cities',
-            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
-          ),
-          10.verticalSpace,
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
-            children: const ['Lagos', 'Abuja', 'Port Harcourt', 'Ibadan']
-                .map(
-                  (city) => Chip(
-                    label: Text(city),
-                    side: BorderSide.none,
-                    backgroundColor: AppColors.chipBackground,
+
+          28.verticalSpace,
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Popular Picks',
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+              ),
+              GestureDetector(
+                onTap: () => context.go(AppRoutes.search),
+                child: Text(
+                  'See all',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: AppColors.brandNavy,
+                    fontWeight: FontWeight.w600,
                   ),
-                )
-                .toList(),
+                ),
+              ),
+            ],
           ),
+          12.verticalSpace,
+          ...rentals.map(
+            (rental) => Padding(
+              padding: EdgeInsets.only(bottom: 12.h),
+              child: _RentalListCard(
+                rental: rental,
+                onTap: () {
+                  ref.read(selectedRentalIdProvider.notifier).state = rental.id;
+                  context.push(AppRoutes.rentalDetails);
+                },
+              ),
+            ),
+          ),
+          20.verticalSpace,
         ],
       ),
     );
@@ -245,6 +259,124 @@ class _RentalPreviewCard extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RentalListCard extends StatelessWidget {
+  const _RentalListCard({required this.rental, required this.onTap});
+
+  final dynamic rental;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16.r),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(color: AppColors.borderLight),
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.r),
+                bottomLeft: Radius.circular(16.r),
+              ),
+              child: Image.network(
+                rental.imageUrl,
+                width: 110.w,
+                height: 100.h,
+                fit: BoxFit.cover,
+                errorBuilder: (_, _, _) => Container(
+                  width: 110.w,
+                  height: 100.h,
+                  color: AppColors.chipBackground,
+                  child: Icon(Icons.image_outlined, color: AppColors.textMuted),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      rental.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    5.verticalSpace,
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_outlined,
+                          size: 12.w,
+                          color: AppColors.textMuted,
+                        ),
+                        3.horizontalSpace,
+                        Expanded(
+                          child: Text(
+                            rental.location,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 11.sp,
+                              color: AppColors.textMuted,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    8.verticalSpace,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.star_rounded,
+                              size: 14.w,
+                              color: AppColors.ratingStar,
+                            ),
+                            3.horizontalSpace,
+                            Text(
+                              rental.rating.toString(),
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          '\$${rental.pricePerNight.toStringAsFixed(0)}/night',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.deepNavy,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

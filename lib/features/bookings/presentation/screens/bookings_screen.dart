@@ -249,8 +249,7 @@ class _MetaChip extends StatelessWidget {
   }
 }
 
-class _EmptyBookingState extends StatelessWidget {
-  const _EmptyBookingState({required this.onBrowse});
+class _EmptyBookingState extends StatelessWidget {  const _EmptyBookingState({required this.onBrowse});
 
   final VoidCallback onBrowse;
 
