@@ -6,7 +6,7 @@ import '../../../core/constants/paystack_config.dart';
 /// Provider for Paystack payment service singleton
 final paystackServiceProvider = Provider<PaystackPaymentService>((ref) {
   final service = PaystackPaymentService();
-  service.initialize(PaystackConfig.secretKey);
+  service.initialize(PaystackConfig.publicKey);
   return service;
 });
 

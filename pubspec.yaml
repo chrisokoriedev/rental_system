@@ -17,7 +17,6 @@ dependencies:
   shared_preferences: ^2.3.2
   google_fonts: ^6.2.1
   flutter_paystack_plus: ^2.5.0 # Paystack payment gateway
-  http: ^1.1.0                  # HTTP client for API calls
   fpdart: ^1.1.0                # Functional programming utilities
 
 dev_dependencies:
