@@ -56,21 +56,21 @@ class AppShell extends StatelessWidget {
   final String location;
 
   int _currentIndex() {
-    for (var index = 0; index < _destinations.length; index++) {
-      if (location.startsWith(_destinations[index].location)) {
-        return index;
-      }
-    }
+    final cleanPath = location.split('?').first;
+    
+    if (cleanPath == AppRoutes.home) return 0;
+    if (cleanPath == AppRoutes.search) return 1;
+    if (cleanPath == AppRoutes.bookings) return 2;
+    if (cleanPath == AppRoutes.profile) return 3;
+    
     return 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         if (_currentIndex() != 0) {
-          print('Popping to home');
           context.go(AppRoutes.home);
           return false;
         }
