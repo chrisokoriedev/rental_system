@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rental_system/features/payments/data/services/paystack_payment_service.dart';
 import '../../../core/constants/paystack_config.dart';
@@ -5,8 +6,7 @@ import '../../../core/constants/paystack_config.dart';
 /// Provider for Paystack payment service singleton
 final paystackServiceProvider = Provider<PaystackPaymentService>((ref) {
   final service = PaystackPaymentService();
-  // Initialize with public key
-  service.initialize(PaystackConfig.publicKey);
+  service.initialize(PaystackConfig.secretKey);
   return service;
 });
 
@@ -50,6 +50,7 @@ class PaymentNotifier extends StateNotifier<PaymentState> {
     required String email,
     required int amountInKobo,
     required String reference,
+    required BuildContext context,
   }) async {
     state = state.copyWith(isProcessing: true, errorMessage: null);
 
@@ -62,6 +63,7 @@ class PaymentNotifier extends StateNotifier<PaymentState> {
 
       final response = await _paymentService.chargeCard(
         transaction: transaction,
+        context: context,
       );
 
       if (response.success) {

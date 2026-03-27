@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter_paystack_plus/flutter_paystack_plus.dart';
 import 'package:http/http.dart' as http;
 
 /// Model for payment transaction details
 class PaymentTransaction {
   final String reference;
   final String email;
-  final int amountInKobo; // Amount in kobo (1/100 of naira)
+  final int amountInKobo; 
   final String? currency;
 
   PaymentTransaction({
@@ -40,29 +42,59 @@ class PaystackPaymentResponse {
 
 /// Service to handle Paystack payment integration
 class PaystackPaymentService {
-  late String _publicKey;
+  late String _secretKey;
   final String _apiEndpoint = 'https://api.paystack.co';
+  final String _callbackUrl = 'https://example.com/callback';
 
-  /// Initialize Paystack with public key
-  Future<void> initialize(String publicKey) async {
-    _publicKey = publicKey;
+  /// Initialize Paystack with secret key
+  Future<void> initialize(String secretKey) async {
+    _secretKey = secretKey;
   }
 
-  /// Create Paystack payment authorization endpoint URL
-  String getPaymentAuthorizationUrl(PaymentTransaction transaction) {
-    final params = {
-      'key': _publicKey,
-      'email': transaction.email,
-      'amount': transaction.amountInKobo.toString(),
-      'reference': transaction.reference,
-      'currency': transaction.currency ?? 'NGN',
-    };
+  /// Charge card and process payment with Paystack
+  Future<PaystackPaymentResponse> chargeCard({
+    required PaymentTransaction transaction,
+    required BuildContext context,
+  }) async {
+    try {
+      bool paymentSuccess = false;
 
-    final queryString = params.entries
-        .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-        .join('&');
+      await FlutterPaystackPlus.openPaystackPopup(
+        context: context,
+        customerEmail: transaction.email,
+        amount: transaction.amountInKobo.toString(),
+        reference: transaction.reference,
+        secretKey: _secretKey,
+        callBackUrl: _callbackUrl,
+        currency: transaction.currency ?? 'NGN',
+        onSuccess: () {
+          paymentSuccess = true;
+        },
+        onClosed: () {
+          paymentSuccess = false;
+        },
+      );
 
-    return 'https://checkout.paystack.com/?$queryString';
+      if (paymentSuccess) {
+        return PaystackPaymentResponse(
+          success: true,
+          message: 'Payment successful',
+          reference: transaction.reference,
+          verifyUrl:
+              '$_apiEndpoint/transaction/verify/${transaction.reference}',
+        );
+      } else {
+        return PaystackPaymentResponse(
+          success: false,
+          message: 'Payment cancelled',
+        );
+      }
+    } catch (e) {
+      return PaystackPaymentResponse(
+        success: false,
+        message: 'Payment error: ${e.toString()}',
+      );
+    }
   }
 
   /// Verify transaction with Paystack backend
@@ -100,31 +132,11 @@ class PaystackPaymentService {
     }
   }
 
-  /// Charge card and process payment (for direct implementation)
-  Future<PaystackPaymentResponse> chargeCard({
-    required PaymentTransaction transaction,
-  }) async {
-    try {
-      // In a real implementation, this would use the Paystack SDK
-      // For now, return a mock response
-      return PaystackPaymentResponse(
-        success: true,
-        message: 'Payment processed',
-        reference: transaction.reference,
-        verifyUrl:
-            '$_apiEndpoint/transaction/verify/${transaction.reference}',
-      );
-    } catch (e) {
-      return PaystackPaymentResponse(
-        success: false,
-        message: 'Payment error: ${e.toString()}',
-      );
-    }
-  }
-
-  /// Get public key
-  String get publicKey => _publicKey;
+  /// Get secret key
+  String get secretKey => _secretKey;
 
   /// Get API endpoint
   String get apiEndpoint => _apiEndpoint;
 }
+
+

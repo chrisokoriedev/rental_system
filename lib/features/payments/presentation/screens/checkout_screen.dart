@@ -11,14 +11,12 @@ import '../../../../core/widgets/app_button.dart';
 import '../../../auth/providers/auth_session_provider.dart';
 import '../../../bookings/providers/bookings_ui_provider.dart';
 import '../../providers/payment_provider.dart';
-import '../../providers/payment_ui_provider.dart';
 
 class CheckoutScreen extends ConsumerWidget {
   const CheckoutScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final method = ref.watch(selectedPaymentMethodProvider);
     final booking = ref.watch(bookingSummaryProvider);
     final paymentState = ref.watch(paymentProvider);
     final authProfile = ref.watch(authProfileProvider);
@@ -39,35 +37,123 @@ class CheckoutScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Choose payment method',
+                'Order Summary',
                 style: TextStyle(fontWeight: FontWeight.w800, fontSize: 22.sp),
               ),
-              8.verticalSpace,
-              if (booking != null)
-                Text(
-                  'Total: ₦${(booking.total * 100).toStringAsFixed(0)}',
-                  style: TextStyle(
-                      fontSize: 14.sp, color: AppColors.textSecondary),
+              24.verticalSpace,
+              // Booking details card
+              Container(
+                padding: EdgeInsets.all(16.w),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  border: Border.all(color: AppColors.white70),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
-              12.verticalSpace,
-              ...PaymentMethod.values.map(
-                (item) => RadioListTile<PaymentMethod>(
-                  value: item,
-                  groupValue: method,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  tileColor: AppColors.white,
-                  title: Text(
-                    item.name.toUpperCase(),
-                    style: TextStyle(fontSize: 14.sp),
-                  ),
-                  onChanged: (value) {
-                    if (value != null) {
-                      ref.read(selectedPaymentMethodProvider.notifier).state =
-                          value;
-                    }
-                  },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (booking != null) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Property',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          Text(
+                            'Lovely Apartment',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      12.verticalSpace,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Number of nights',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          Text(
+                            '${booking.nights} nights',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      12.verticalSpace,
+                      Divider(height: 1, color: AppColors.white70),
+                      12.verticalSpace,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Total Amount',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            '₦${booking.total.toStringAsFixed(0)}',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.deepNavy,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              24.verticalSpace,
+              // Payment method info
+              Container(
+                padding: EdgeInsets.all(14.w),
+                decoration: BoxDecoration(
+                  color: AppColors.subtleSurface,
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.payment, size: 20.sp, color: AppColors.deepNavy),
+                    12.horizontalSpace,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Payment Method',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          4.verticalSpace,
+                          Text(
+                            'Paystack (Secure Payment)',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
               // Show error message if payment fails
@@ -101,8 +187,8 @@ class CheckoutScreen extends ConsumerWidget {
               const Spacer(),
               AppButton(
                 label: paymentState.isProcessing
-                    ? 'Processing...'
-                    : 'Pay now with Paystack',
+                    ? 'Processing Payment...'
+                    : 'Pay with Paystack',
                 onPressed: paymentState.isProcessing
                     ? null
                     : () async {
@@ -130,6 +216,7 @@ class CheckoutScreen extends ConsumerWidget {
                               email: authProfile.email,
                               amountInKobo: amountInKobo,
                               reference: reference,
+                              context: context,
                             );
 
                         if (!context.mounted) return;
@@ -165,4 +252,5 @@ class CheckoutScreen extends ConsumerWidget {
     );
   }
 }
+
 
