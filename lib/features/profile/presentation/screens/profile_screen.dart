@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../auth/models/auth_profile_model.dart';
 import '../../../auth/providers/auth_session_provider.dart';
 
@@ -22,11 +23,7 @@ class ProfileScreen extends ConsumerWidget {
             padding: EdgeInsets.all(20.w),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(28.r),
-              gradient: const LinearGradient(
-                colors: [Color(0xFF1E2A5A), Color(0xFF233B7A)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: AppColors.deepNavy,
             ),
             child: Row(
               children: [

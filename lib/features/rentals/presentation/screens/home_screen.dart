@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../providers/rentals_ui_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -36,76 +37,89 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
           14.verticalSpace,
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 14.w),
-            height: 56.h,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.r),
-              color: Colors.white,
-              border: Border.all(color: const Color(0xFFDDE2EA)),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.search, size: 22.w, color: const Color(0xFF7A7B86)),
-                10.horizontalSpace,
-                Text(
-                  'Search lodges, city, landmark',
-                  style: TextStyle(
-                    fontSize: 14.sp,
+          InkWell(
+            borderRadius: BorderRadius.circular(20.r),
+            onTap: () => context.go(AppRoutes.search),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 14.w),
+              height: 56.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.r),
+                color: Colors.white,
+                border: Border.all(color: const Color(0xFFDDE2EA)),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.search,
+                    size: 22.w,
                     color: const Color(0xFF7A7B86),
                   ),
-                ),
-              ],
+                  10.horizontalSpace,
+                  Text(
+                    'Search lodges, city, landmark',
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: const Color(0xFF7A7B86),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           20.verticalSpace,
-          Container(
-            padding: EdgeInsets.all(16.w),
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E2A5A),
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 34.w,
-                  height: 34.w,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
+          InkWell(
+            borderRadius: BorderRadius.circular(20.r),
+            onTap: () => context.go(AppRoutes.search),
+            child: Container(
+              padding: EdgeInsets.all(16.w),
+              decoration: BoxDecoration(
+                color: AppColors.deepNavy,
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 34.w,
+                    height: 34.w,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.person, size: 20),
                   ),
-                  child: const Icon(Icons.person, size: 20),
-                ),
-                10.horizontalSpace,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Recent Searches',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: Colors.white70,
-                          fontWeight: FontWeight.w500,
+                  10.horizontalSpace,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Recent Searches',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.white70,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      4.verticalSpace,
-                      Text(
-                        featuredRentals.first.title,
-                        style: TextStyle(
-                          fontSize: 15.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
+                        4.verticalSpace,
+                        Text(
+                          featuredRentals.first.title,
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () => context.go(AppRoutes.rentals),
-                  child: const Text('View all'),
-                ),
-              ],
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: Colors.white70,
+                    size: 14.w,
+                  ),
+                ],
+              ),
             ),
           ),
           20.verticalSpace,

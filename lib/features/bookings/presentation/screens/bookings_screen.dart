@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../rentals/providers/rentals_ui_provider.dart';
 import '../../models/booking_model.dart';
@@ -25,7 +26,7 @@ class BookingsScreen extends ConsumerWidget {
           Container(
             padding: EdgeInsets.all(20.w),
             decoration: BoxDecoration(
-              color: const Color(0xFF102033),
+              color: AppColors.deepNavy,
               borderRadius: BorderRadius.circular(28.r),
             ),
             child: Column(

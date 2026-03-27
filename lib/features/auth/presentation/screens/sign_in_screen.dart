@@ -168,7 +168,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                             await ref
                                 .read(authSessionProvider.notifier)
                                 .signInWithGoogle();
-                            if (!mounted) {
+                            if (!context.mounted) {
                               return;
                             }
                             context.go(AppRoutes.home);
