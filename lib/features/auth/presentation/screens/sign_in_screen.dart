@@ -35,9 +35,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       return;
     }
 
-    await ref.read(authSessionProvider.notifier).signIn(
-          email: _emailController.text,
-        );
+    await ref
+        .read(authSessionProvider.notifier)
+        .signIn(email: _emailController.text);
     if (mounted) {
       context.go(AppRoutes.home);
     }
@@ -85,41 +85,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.all(22.w),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(32.r),
-                    gradient: const LinearGradient(
-                      colors: [AppColors.brandNavy, AppColors.sunset],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Welcome back',
-                        style: TextStyle(
-                          fontSize: 31.sp,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.white,
-                          letterSpacing: -0.8,
-                        ),
-                      ),
-                      8.verticalSpace,
-                      Text(
-                        'Sign in to continue browsing stays, saving bookings, and managing your profile.',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          height: 1.5,
-                          color: AppColors.white82,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                20.verticalSpace,
+                40.verticalSpace,
                 Container(
                   padding: EdgeInsets.all(20.w),
                   decoration: BoxDecoration(
@@ -243,10 +209,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           ),
                         ),
                         18.verticalSpace,
-                        AppButton(
-                          label: 'Continue',
-                          onPressed: _submit,
-                        ),
+                        AppButton(label: 'Continue', onPressed: _submit),
                         16.verticalSpace,
                         TextButton(
                           onPressed: () {},

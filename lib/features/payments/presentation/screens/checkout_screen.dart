@@ -35,7 +35,7 @@ class CheckoutScreen extends ConsumerWidget {
               Text(
                 'Total: \$${booking.total.toStringAsFixed(0)}',
                 style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondary),
-              ),
+          ),
             12.verticalSpace,
             ...PaymentMethod.values.map(
               (item) => RadioListTile<PaymentMethod>(

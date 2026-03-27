@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../theme/app_colors.dart';
+
 class RentalCard extends StatelessWidget {
   const RentalCard({
     super.key,
@@ -48,18 +50,26 @@ class RentalCard extends StatelessWidget {
                   6.verticalSpace,
                   Row(
                     children: [
-                      Icon(Icons.place_outlined, size: 16.w, color: Colors.grey),
+                      Icon(
+                        Icons.place_outlined,
+                        size: 16.w,
+                        color: AppColors.neutralGrey,
+                      ),
                       4.horizontalSpace,
                       Expanded(
                         child: Text(
                           location,
                           style: TextStyle(
-                            color: Colors.grey.shade700,
+                            color: AppColors.neutralGrey700,
                             fontSize: 13.sp,
                           ),
                         ),
                       ),
-                      Icon(Icons.star_rounded, size: 16.w, color: Colors.amber),
+                      Icon(
+                        Icons.star_rounded,
+                        size: 16.w,
+                        color: AppColors.ratingStar,
+                      ),
                       4.horizontalSpace,
                       Text(rating, style: TextStyle(fontSize: 13.sp)),
                     ],

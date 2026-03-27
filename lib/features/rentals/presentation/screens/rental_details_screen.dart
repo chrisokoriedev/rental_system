@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../bookings/providers/bookings_ui_provider.dart';
 import '../../providers/rentals_ui_provider.dart';
@@ -48,7 +49,7 @@ class RentalDetailsScreen extends ConsumerWidget {
               const Icon(Icons.place_outlined),
               6.horizontalSpace,
               Expanded(child: Text(rental.location, style: TextStyle(fontSize: 14.sp))),
-              const Icon(Icons.star_rounded, color: Colors.amber),
+              const Icon(Icons.star_rounded, color: AppColors.ratingStar),
               4.horizontalSpace,
               Text(rental.rating.toStringAsFixed(1)),
             ],

@@ -35,6 +35,10 @@ class AppColors {
   static const googleBlue = Color(0xFF4285F4);
   static const draftAccent = Color(0xFFE6A44D);
   static const pendingAccent = Color(0xFF4D8BFF);
+  static const ratingStar = Color(0xFFFFC107);
+  static const neutralGrey = Color(0xFF9E9E9E);
+  static const neutralGrey700 = Color(0xFF616161);
+  static const successGreen = Color(0xFF4CAF50);
   static const buttonDark = Color(0xFF0D1119);
 
   static const scaffoldBackground = Color(0xFFF2F4F8);

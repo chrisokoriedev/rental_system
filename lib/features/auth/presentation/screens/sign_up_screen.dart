@@ -73,7 +73,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       return;
     }
 
-    await ref.read(authSessionProvider.notifier).signUp(
+    await ref
+        .read(authSessionProvider.notifier)
+        .signUp(
           fullName: _fullNameController.text,
           email: _emailController.text,
         );
@@ -88,7 +90,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.backgroundSandSoft, AppColors.backgroundBlueSoft],
+            colors: [
+              AppColors.backgroundSandSoft,
+              AppColors.backgroundBlueSoft,
+            ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -99,37 +104,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.all(22.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.brandNavy,
-                    borderRadius: BorderRadius.circular(32.r),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Create your profile',
-                        style: TextStyle(
-                          fontSize: 30.sp,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.white,
-                          letterSpacing: -0.8,
-                        ),
-                      ),
-                      8.verticalSpace,
-                      Text(
-                        'The details you enter here become the profile details shown inside the app.',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          height: 1.5,
-                          color: AppColors.white82,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                20.verticalSpace,
+                50.verticalSpace,
                 Container(
                   padding: EdgeInsets.all(20.w),
                   decoration: BoxDecoration(
@@ -205,10 +180,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           ),
                         ),
                         22.verticalSpace,
-                        AppButton(
-                          label: 'Create account',
-                          onPressed: _submit,
-                        ),
+                        AppButton(label: 'Create account', onPressed: _submit),
                         16.verticalSpace,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

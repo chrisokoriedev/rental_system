@@ -21,38 +21,27 @@ class SearchScreen extends ConsumerWidget {
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 18.h),
         children: [
-          Container(
-            padding: EdgeInsets.all(20.w),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28.r),
-              gradient: const LinearGradient(
-                colors: [AppColors.backgroundWarm, AppColors.backgroundBlueSoft],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Search stays',
+                style: TextStyle(
+                  fontSize: 28.sp,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.6,
+                ),
               ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Search stays',
-                  style: TextStyle(
-                    fontSize: 28.sp,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.6,
-                  ),
+              8.verticalSpace,
+              Text(
+                'Search by title or city and jump straight into a listing.',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: AppColors.textSecondary,
+                  height: 1.5,
                 ),
-                8.verticalSpace,
-                Text(
-                  'Search by title or city and jump straight into a listing.',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: AppColors.textSecondary,
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
           18.verticalSpace,
           AppTextField(

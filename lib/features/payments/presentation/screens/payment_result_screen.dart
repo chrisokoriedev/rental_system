@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 
 class PaymentResultScreen extends StatelessWidget {
@@ -17,7 +18,11 @@ class PaymentResultScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.check_circle_rounded, size: 90.w, color: Colors.green),
+            Icon(
+              Icons.check_circle_rounded,
+              size: 90.w,
+              color: AppColors.successGreen,
+            ),
             16.verticalSpace,
             Text(
               'Payment successful',
