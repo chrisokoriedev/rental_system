@@ -1,11 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/providers/auth_session_provider.dart';
 import '../../features/auth/presentation/screens/sign_in_screen.dart';
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
-import '../../features/bookings/presentation/screens/bookings_screen.dart';
 import '../../features/bookings/presentation/screens/booking_summary_screen.dart';
+import '../../features/bookings/presentation/screens/bookings_screen.dart';
 import '../../features/payments/presentation/screens/checkout_screen.dart';
 import '../../features/payments/presentation/screens/payment_result_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
@@ -16,10 +17,14 @@ import '../../features/rentals/presentation/screens/search_screen.dart';
 import '../constants/app_routes.dart';
 import 'app_shell.dart';
 
+final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
+
 final routerProvider = Provider<GoRouter>((ref) {
   final isLoggedIn = ref.watch(authSessionProvider);
 
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: isLoggedIn ? AppRoutes.home : AppRoutes.signIn,
     redirect: (context, state) {
       final onAuthPages =
@@ -38,6 +43,11 @@ final routerProvider = Provider<GoRouter>((ref) {
     },
     routes: [
       GoRoute(
+        path: '/',
+        redirect: (context, state) =>
+            isLoggedIn ? AppRoutes.home : AppRoutes.signIn,
+      ),
+      GoRoute(
         path: AppRoutes.signIn,
         builder: (context, state) => const SignInScreen(),
       ),
@@ -46,6 +56,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const SignUpScreen(),
       ),
       ShellRoute(
+        navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) {
           return AppShell(location: state.uri.path, child: child);
         },

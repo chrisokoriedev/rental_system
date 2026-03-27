@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constants/app_routes.dart';
+
+/// Provider to track the selected bottom navigation index
+final selectedNavIndexProvider = StateProvider<int>((ref) => 0);
 
 class _ShellDestination {
   const _ShellDestination({
@@ -46,35 +50,32 @@ const _destinations = [
 ];
 
 class AppShell extends StatelessWidget {
-  const AppShell({
-    super.key,
-    required this.child,
-    required this.location,
-  });
+  const AppShell({super.key, required this.child, required this.location});
 
   final Widget child;
   final String location;
 
   int _currentIndex() {
     final cleanPath = location.split('?').first;
-    
+
     if (cleanPath == AppRoutes.home) return 0;
     if (cleanPath == AppRoutes.search) return 1;
     if (cleanPath == AppRoutes.bookings) return 2;
     if (cleanPath == AppRoutes.profile) return 3;
-    
+
     return 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_currentIndex() != 0) {
+    final isHomeTab = _currentIndex() == 0;
+
+    return PopScope(
+      canPop: isHomeTab,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
           context.go(AppRoutes.home);
-          return false;
         }
-        return true;
       },
       child: Scaffold(
         body: SafeArea(child: child),
