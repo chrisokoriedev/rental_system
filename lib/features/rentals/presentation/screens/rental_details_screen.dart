@@ -16,6 +16,7 @@ class RentalDetailsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final rental = ref.watch(selectedRentalProvider);
     final nights = ref.watch(selectedNightsProvider);
+    final canPop = context.canPop();
 
     if (rental == null) {
       return Scaffold(
@@ -29,9 +30,16 @@ class RentalDetailsScreen extends ConsumerWidget {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Rental Details')),
-      body: ListView(
+    return PopScope(
+      canPop: canPop,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          context.go(AppRoutes.home);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Rental Details')),
+        body: ListView(
         padding: EdgeInsets.all(16.w),
         children: [
           ClipRRect(
@@ -88,9 +96,10 @@ class RentalDetailsScreen extends ConsumerWidget {
           20.verticalSpace,
           AppButton(
             label: 'Book now - \$${rental.pricePerNight.toStringAsFixed(0)}/night',
-            onPressed: () => context.go(AppRoutes.bookingSummary),
+            onPressed: () => context.push(AppRoutes.bookingSummary),
           ),
         ],
+      ),
       ),
     );
   }

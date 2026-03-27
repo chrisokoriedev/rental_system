@@ -139,7 +139,7 @@ class HomeScreen extends ConsumerWidget {
                   onTap: () {
                     ref.read(selectedRentalIdProvider.notifier).state =
                         rental.id;
-                    context.go(AppRoutes.rentalDetails);
+                    context.push(AppRoutes.rentalDetails);
                   },
                 );
               },

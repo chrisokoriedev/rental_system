@@ -13,6 +13,7 @@ class BookingSummaryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final booking = ref.watch(bookingSummaryProvider);
+    final canPop = context.canPop();
 
     if (booking == null) {
       return Scaffold(
@@ -23,9 +24,16 @@ class BookingSummaryScreen extends ConsumerWidget {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Booking Summary')),
-      body: Padding(
+    return PopScope(
+      canPop: canPop,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          context.go(AppRoutes.home);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Booking Summary')),
+        body: Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,10 +82,11 @@ class BookingSummaryScreen extends ConsumerWidget {
             const Spacer(),
             AppButton(
               label: 'Proceed to checkout',
-              onPressed: () => context.go(AppRoutes.checkout),
+              onPressed: () => context.push(AppRoutes.checkout),
             ),
           ],
         ),
+      ),
       ),
     );
   }

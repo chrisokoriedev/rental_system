@@ -106,7 +106,7 @@ class SearchScreen extends ConsumerWidget {
                   rating: rental.rating.toStringAsFixed(1),
                   onTap: () {
                     ref.read(selectedRentalIdProvider.notifier).state = rental.id;
-                    context.go(AppRoutes.rentalDetails);
+                    context.push(AppRoutes.rentalDetails);
                   },
                 ),
               ),

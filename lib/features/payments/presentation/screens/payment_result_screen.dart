@@ -11,9 +11,18 @@ class PaymentResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Payment Result')),
-      body: Padding(
+    final canPop = context.canPop();
+
+    return PopScope(
+      canPop: canPop,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          context.go(AppRoutes.home);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Payment Result')),
+        body: Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -46,6 +55,7 @@ class PaymentResultScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

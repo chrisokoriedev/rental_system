@@ -18,10 +18,18 @@ class CheckoutScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final method = ref.watch(selectedPaymentMethodProvider);
     final booking = ref.watch(bookingSummaryProvider);
+    final canPop = context.canPop();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Checkout')),
-      body: Padding(
+    return PopScope(
+      canPop: canPop,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          context.go(AppRoutes.home);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Checkout')),
+        body: Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,12 +73,13 @@ class CheckoutScreen extends ConsumerWidget {
                     .read(bookingHistoryProvider.notifier)
                     .addCurrentBooking();
                 if (context.mounted) {
-                  context.go(AppRoutes.paymentResult);
+                  context.push(AppRoutes.paymentResult);
                 }
               },
             ),
           ],
         ),
+      ),
       ),
     );
   }

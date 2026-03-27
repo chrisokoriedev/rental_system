@@ -216,7 +216,7 @@ class _BookingDraftCard extends ConsumerWidget {
               10.horizontalSpace,
               Expanded(
                 child: FilledButton(
-                  onPressed: () => context.go(AppRoutes.bookingSummary),
+                  onPressed: () => context.push(AppRoutes.bookingSummary),
                   child: const Text('Open summary'),
                 ),
               ),

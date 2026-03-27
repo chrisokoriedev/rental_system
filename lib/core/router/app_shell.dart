@@ -66,23 +66,34 @@ class AppShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(child: child),
-      bottomNavigationBar: NavigationBar(
-        height: 70.h,
-        selectedIndex: _currentIndex(),
-        onDestinationSelected: (index) {
-          context.go(_destinations[index].location);
-        },
-        destinations: _destinations
-            .map(
-              (item) => NavigationDestination(
-                icon: Icon(item.icon),
-                selectedIcon: Icon(item.selectedIcon),
-                label: item.label,
-              ),
-            )
-            .toList(),
+    // ignore: deprecated_member_use
+    return WillPopScope(
+      onWillPop: () async {
+        if (_currentIndex() != 0) {
+          print('Popping to home');
+          context.go(AppRoutes.home);
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        body: SafeArea(child: child),
+        bottomNavigationBar: NavigationBar(
+          height: 70.h,
+          selectedIndex: _currentIndex(),
+          onDestinationSelected: (index) {
+            context.go(_destinations[index].location);
+          },
+          destinations: _destinations
+              .map(
+                (item) => NavigationDestination(
+                  icon: Icon(item.icon),
+                  selectedIcon: Icon(item.selectedIcon),
+                  label: item.label,
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }
