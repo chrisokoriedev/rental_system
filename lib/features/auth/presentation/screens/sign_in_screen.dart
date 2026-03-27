@@ -156,7 +156,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       ),
                       18.verticalSpace,
                       AppButton(
-                        label: 'Create account',
+                        label: 'Continue',
                         onPressed: () async {
                           await ref.read(authSessionProvider.notifier).signIn();
                           if (context.mounted) {
